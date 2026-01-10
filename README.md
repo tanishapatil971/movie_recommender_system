@@ -26,6 +26,16 @@ The Machine Learning model is developed in **Google Colab**, while the web appli
 
 ---
 
+## 📸 Screenshots
+
+### Home Screen
+![Home Screen](screenshots/home.jpg)
+
+### Recommendation Output
+![Recommendation Output](screenshots/recommendation.jpg)
+
+---
+
 ## 🛠️ Tech Stack
 
 - **Programming Language:** Python  
@@ -34,16 +44,6 @@ The Machine Learning model is developed in **Google Colab**, while the web appli
 - **API Integration:** TMDB API  
 - **Development Tools:** Google Colab, PyCharm  
 - **Version Control:** Git & GitHub  
-
----
-
-## 📸 Screenshots
-
-### Home Screen
-![Home Screen](screenshots/home.jpg)
-
-### Recommendation Output
-![Recommendation Output](screenshots/recommendation.jpg)
 
 ---
 
