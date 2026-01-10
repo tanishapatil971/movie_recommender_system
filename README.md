@@ -37,6 +37,16 @@ The Machine Learning model is developed in **Google Colab**, while the web appli
 
 ---
 
+## 📸 Screenshots
+
+### Home Screen
+![Home Screen](screenshots/home.jpg)
+
+### Recommendation Output
+![Recommendation Output](screenshots/recommendation.jpg)
+
+---
+
 ## 📁 Project Structure
 movie_recommender_system/
 │
