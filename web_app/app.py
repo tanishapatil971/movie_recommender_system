@@ -58,13 +58,19 @@ def recommend(movie):
     )[1:6]
 
     names, posters = [], []
+
     for i in movie_list:
         title = movies.iloc[i[0]]['title']
+
+        poster = fetch_poster(title)
+
+        st.write("Movie:", title)
+        st.write("Poster URL:", poster)
+
         names.append(title)
-        posters.append(fetch_poster(title))
+        posters.append(poster)
 
     return names, posters
-
 
 # ---------------- DATA ----------------
 import os
