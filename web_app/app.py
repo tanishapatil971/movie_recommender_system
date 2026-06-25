@@ -14,25 +14,82 @@ except Exception:
     TMDB_API_KEY = os.getenv("TMDB_API_KEY")
 
 st.set_page_config(
-    page_title="Movie Recommender System",
+    page_title="Movie Recommendation System",
     page_icon="🎬",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="collapsed"
 )
+st.markdown("""
+<style>
 
-# ---------------- LOAD DATA ----------------
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+/* Hide Streamlit UI */
+#MainMenu{
+visibility:hidden;
+}
 
-movies = pd.DataFrame(
-    pickle.load(open(os.path.join(BASE_DIR, "movie_dict.pkl"), "rb"))
-)
+footer{
+visibility:hidden;
+}
 
-similarity = pickle.load(
-    open(os.path.join(BASE_DIR, "similarity.pkl"), "rb")
-)
+header{
+visibility:hidden;
+}
+
+/* App background */
+
+.stApp{
+background:#0E1117;
+}
+
+/* Main title */
+
+.main-title{
+font-size:48px;
+font-weight:800;
+text-align:center;
+color:#E50914;
+margin-top:15px;
+}
+
+/* Subtitle */
+
+.subtitle{
+font-size:18px;
+text-align:center;
+color:#B3B3B3;
+margin-bottom:25px;
+}
+
+/* Movie card */
+
+.movie-card{
+background:#1A1A1A;
+padding:10px;
+border-radius:15px;
+box-shadow:0px 5px 15px rgba(0,0,0,.5);
+transition:0.3s;
+}
+
+.movie-card:hover{
+transform:scale(1.04);
+}
+
+.movie-title{
+font-size:17px;
+font-weight:700;
+text-align:center;
+margin-top:10px;
+color:white;
+}
+
+</style>
+""", unsafe_allow_html=True)
 
 # ---------------- FUNCTIONS ----------------
+
 @st.cache_data(show_spinner=False)
-def fetch_poster(movie_title):
+def fetch_movie_details(movie_title):
+
     try:
         url = "https://api.themoviedb.org/3/search/movie"
 
@@ -43,85 +100,156 @@ def fetch_poster(movie_title):
 
         response = requests.get(url, params=params, timeout=10)
 
-        if response.status_code == 200:
-            data = response.json()
+        if response.status_code != 200:
+            return None
 
-            if data.get("results"):
-                poster_path = data["results"][0].get("poster_path")
+        data = response.json()
 
-                if poster_path:
-                    return f"https://image.tmdb.org/t/p/w500{poster_path}"
+        if not data.get("results"):
+            return None
+
+        movie = data["results"][0]
+
+        poster = None
+
+        if movie.get("poster_path"):
+            poster = f"https://image.tmdb.org/t/p/w500{movie['poster_path']}"
+
+        return {
+            "title": movie.get("title"),
+            "poster": poster,
+            "rating": movie.get("vote_average"),
+            "year": movie.get("release_date","")[:4],
+            "overview": movie.get("overview"),
+            "id": movie.get("id")
+        }
 
     except Exception:
-        pass
-
-    return None
+        return None
 
 
 def recommend(movie):
+
     index = movies[movies["title"] == movie].index[0]
+
     distances = similarity[index]
 
     movie_list = sorted(
         list(enumerate(distances)),
         reverse=True,
-        key=lambda x: x[1]
+        key=lambda x:x[1]
     )[1:6]
 
-    names = []
-    posters = []
+    recommendations=[]
 
     for i in movie_list:
-        movie_title = movies.iloc[i[0]].title
 
-        names.append(movie_title)
-        posters.append(fetch_poster(movie_title))
+        title = movies.iloc[i[0]].title
 
-    return names, posters
+        details = fetch_movie_details(title)
 
+        if details:
+            recommendations.append(details)
+
+    return recommendations
+
+# ---------------- DATA ----------------
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+movies = pd.DataFrame(
+    pickle.load(
+        open(
+            os.path.join(BASE_DIR, "movie_dict.pkl"),
+            "rb"
+        )
+    )
+)
+
+similarity = pickle.load(
+    open(
+        os.path.join(BASE_DIR, "similarity.pkl"),
+        "rb"
+    )
+)
 
 # ---------------- UI ----------------
-st.title("🎬 Movie Recommender System")
 
-st.caption(
-    "A content-based movie recommendation system using cosine similarity and TMDB API."
+st.markdown(
+"""
+<div class='main-title'>
+🎬 Movie Recommendation System
+</div>
+
+<div class='subtitle'>
+Discover movies you'll love using Machine Learning & Cosine Similarity
+</div>
+""",
+unsafe_allow_html=True
 )
-
-st.divider()
 
 selected_movie = st.selectbox(
-    "Select a movie",
-    movies["title"].values
+    "🍿 Search Movie",
+    movies["title"].values,
+    index=None,
+    placeholder="Start typing a movie..."
 )
 
-if st.button("Recommend"):
+st.write("")
 
-    with st.spinner("Finding similar movies..."):
+if st.button("🎥 Recommend Movies", use_container_width=True):
 
-        names, posters = recommend(selected_movie)
+    if not selected_movie:
+        st.warning("Please select a movie first.")
+        st.stop()
+
+    with st.spinner("Finding movies you'll love... 🍿"):
+
+        recommendations = recommend(selected_movie)
+
+    st.markdown("## Recommended For You")
 
     cols = st.columns(5)
 
-    for i in range(5):
+    for idx, movie in enumerate(recommendations):
 
-        with cols[i]:
+        with cols[idx]:
 
-            if posters[i]:
+            st.markdown("<div class='movie-card'>", unsafe_allow_html=True)
+
+            if movie["poster"]:
 
                 try:
-                    image = requests.get(posters[i], timeout=10)
+                    img = requests.get(movie["poster"], timeout=10)
 
                     st.image(
-                        image.content,
+                        img.content,
                         use_container_width=True
                     )
 
-                except Exception:
-                    st.warning("Poster unavailable")
+                except:
 
-            else:
-                st.warning("Poster unavailable")
+                    st.image(
+                        "https://placehold.co/300x450/png?text=No+Poster",
+                        use_container_width=True
+                    )
 
             st.markdown(
-                f"**{names[i]}**"
+                f"<div class='movie-title'>{movie['title']}</div>",
+                unsafe_allow_html=True
             )
+
+            st.markdown(
+                f"⭐ **{movie['rating']:.1f}**"
+            )
+
+            st.caption(movie["year"])
+
+            st.markdown("</div>", unsafe_allow_html=True)
+
+st.write("")
+st.divider()
+
+st.caption(
+    "Built with ❤️ using Python • Streamlit • Scikit-learn • TMDB API"
+)
