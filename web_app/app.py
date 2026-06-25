@@ -6,8 +6,12 @@ import os
 from dotenv import load_dotenv
 
 # ---------------- CONFIG ----------------
-load_dotenv()
-TMDB_API_KEY = os.getenv("TMDB_API_KEY")
+load_dotenv()  # keeps local development working
+
+try:
+    TMDB_API_KEY = st.secrets["TMDB_API_KEY"]   # Streamlit Cloud
+except Exception:
+    TMDB_API_KEY = os.getenv("TMDB_API_KEY")    # Local .env
 
 st.set_page_config(
     page_title="Movie Recommender System",
