@@ -13,9 +13,6 @@ try:
 except Exception:
     TMDB_API_KEY = os.getenv("TMDB_API_KEY")    # Local .env
     
-st.write("TMDB Key Loaded:", TMDB_API_KEY is not None)
-st.write("TMDB Key Prefix:", TMDB_API_KEY[:5] if TMDB_API_KEY else "None")
-
 st.set_page_config(
     page_title="Movie Recommender System",
     page_icon="🎬",
@@ -32,10 +29,6 @@ def fetch_poster(movie_title):
     }
 
     response = requests.get(url, params=params, timeout=10)
-
-    st.write("Movie:", movie_title)
-    st.write("Status Code:", response.status_code)
-    st.write("Response:", response.json())
 
     data = response.json()
 
@@ -63,9 +56,6 @@ def recommend(movie):
         title = movies.iloc[i[0]]['title']
 
         poster = fetch_poster(title)
-
-        st.write("Movie:", title)
-        st.write("Poster URL:", poster)
 
         names.append(title)
         posters.append(poster)
@@ -114,10 +104,9 @@ if st.button("Recommend"):
         cols = st.columns(5)
         for i in range(5):
             with cols[i]:
-                st.image(
-    posters[i],
-    caption=names[i],
-    use_container_width=True,
-    output_format="PNG"
-)
+                try:
+    img = requests.get(posters[i], timeout=10)
+    st.image(img.content, caption=names[i], use_container_width=True)
+except Exception as e:
+    st.error(e)
                 st.markdown(f"**{names[i]}**")
