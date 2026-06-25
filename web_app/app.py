@@ -12,6 +12,9 @@ try:
     TMDB_API_KEY = st.secrets["TMDB_API_KEY"]   # Streamlit Cloud
 except Exception:
     TMDB_API_KEY = os.getenv("TMDB_API_KEY")    # Local .env
+    
+st.write("TMDB Key Loaded:", TMDB_API_KEY is not None)
+st.write("TMDB Key Prefix:", TMDB_API_KEY[:5] if TMDB_API_KEY else "None")
 
 st.set_page_config(
     page_title="Movie Recommender System",
