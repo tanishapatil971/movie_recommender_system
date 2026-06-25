@@ -18,19 +18,23 @@ st.set_page_config(
 # ---------------- FUNCTIONS ----------------
 @st.cache_data(show_spinner=False)
 def fetch_poster(movie_title):
-    try:
-        url = "https://api.themoviedb.org/3/search/movie"
-        params = {
-            "api_key": TMDB_API_KEY,
-            "query": movie_title
-        }
-        response = requests.get(url, params=params, timeout=5)
-        data = response.json()
+    url = "https://api.themoviedb.org/3/search/movie"
+    params = {
+        "api_key": TMDB_API_KEY,
+        "query": movie_title
+    }
 
-        if data.get("results") and data["results"][0].get("poster_path"):
-            return f"https://image.tmdb.org/t/p/w500{data['results'][0]['poster_path']}"
-    except:
-        pass
+    response = requests.get(url, params=params, timeout=10)
+
+    print("Status Code:", response.status_code)
+    print("Response:", response.text)
+
+    data = response.json()
+
+    if response.status_code == 200 and data.get("results"):
+        poster_path = data["results"][0].get("poster_path")
+        if poster_path:
+            return f"https://image.tmdb.org/t/p/w500{poster_path}"
 
     return "https://via.placeholder.com/500x750?text=No+Poster"
 
