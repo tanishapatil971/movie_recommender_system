@@ -114,5 +114,10 @@ if st.button("Recommend"):
         cols = st.columns(5)
         for i in range(5):
             with cols[i]:
-                st.image(posters[i], use_container_width=True)
+                st.image(
+    posters[i],
+    caption=names[i],
+    use_container_width=True,
+    output_format="PNG"
+)
                 st.markdown(f"**{names[i]}**")
