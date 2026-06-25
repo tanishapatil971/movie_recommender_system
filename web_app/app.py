@@ -103,10 +103,15 @@ if st.button("Recommend"):
 
         cols = st.columns(5)
         for i in range(5):
-            with cols[i]:
-                try:
-    img = requests.get(posters[i], timeout=10)
-    st.image(img.content, caption=names[i], use_container_width=True)
-except Exception as e:
-    st.error(e)
-                st.markdown(f"**{names[i]}**")
+          with cols[i]:
+            try:
+              img = requests.get(posters[i], timeout=10)
+              st.image(
+                 img.content,
+                 caption=names[i],
+                 use_container_width=True
+              )
+           except Exception as e:
+              st.error(str(e))
+
+           st.markdown(f"**{names[i]}**")
