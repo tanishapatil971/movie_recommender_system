@@ -33,8 +33,9 @@ def fetch_poster(movie_title):
 
     response = requests.get(url, params=params, timeout=10)
 
-    print("Status Code:", response.status_code)
-    print("Response:", response.text)
+    st.write("Movie:", movie_title)
+    st.write("Status Code:", response.status_code)
+    st.write("Response:", response.json())
 
     data = response.json()
 
