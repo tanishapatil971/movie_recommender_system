@@ -178,72 +178,58 @@ similarity = pickle.load(
 
 st.markdown("""
 <div style="
-background:linear-gradient(135deg,#1B1B1B,#0E1117);
-padding:45px;
-border-radius:20px;
+background:linear-gradient(rgba(10,10,10,.82),rgba(10,10,10,.82)),
+url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1600');
+background-size:cover;
+background-position:center;
+padding:70px;
+border-radius:25px;
 text-align:center;
-margin-bottom:30px;
-box-shadow:0px 8px 25px rgba(0,0,0,.45);
+margin-bottom:35px;
 ">
 
 <h1 style="
+font-size:60px;
+font-weight:900;
 color:white;
-font-size:52px;
-margin-bottom:10px;
-font-weight:800;
+margin-bottom:15px;
 ">
+
 🎬 Movie Recommendation System
+
 </h1>
 
 <p style="
-color:#CFCFCF;
-font-size:19px;
-margin-bottom:20px;
+font-size:22px;
+color:#D1D5DB;
 ">
-Discover movies you'll love using Artificial Intelligence
-</p>
 
-<div style="
-display:inline-block;
-background:#262730;
-padding:10px 22px;
-border-radius:30px;
-color:#E8E8E8;
-font-size:16px;
-">
-✨ Content-Based Recommendation Engine • TMDB API • Machine Learning
-</div>
+Find your next favorite movie using Artificial Intelligence
+
+</p>
 
 </div>
 """, unsafe_allow_html=True)
 
-col1, col2, col3 = st.columns(3)
+st.markdown("""
+<div style="
+background:#1B1F27;
+padding:25px;
+border-radius:18px;
+margin-bottom:25px;
+box-shadow:0px 8px 30px rgba(0,0,0,.35);
+">
 
-with col1:
-    st.metric("🎥 Movies", f"{len(movies):,}")
+<h3 style="color:white;">
+🔍 Search Movie
+</h3>
 
-with col2:
-    st.metric("🤖 Model", "Cosine Similarity")
+<p style="color:#A3A3A3;">
+Choose a movie you like and our AI will recommend similar ones.
+</p>
 
-with col3:
-    st.metric("🌐 API", "TMDB")
-
-st.write("")
-
-st.markdown("## 🍿 Find Your Favorite Movie")
-
-st.caption(
-    "Choose a movie you already enjoy and discover five similar recommendations."
-)
-
-selected_movie = st.selectbox(
-    "🍿 Search Movie",
-    movies["title"].values,
-    index=None,
-    placeholder="Start typing a movie..."
-)
-
-st.write("")
+</div>
+""", unsafe_allow_html=True)
 
 if st.button("✨ Discover Similar Movies", use_container_width=True):
 
