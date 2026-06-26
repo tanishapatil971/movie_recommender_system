@@ -247,26 +247,6 @@ with left:
 
     )
 
-with right:
-
-    st.markdown("""
-<div style="
-background:#1B1F27;
-padding:22px;
-border-radius:18px;
-">
-
-<h3 style="margin-top:0;">
-Project
-</h3>
-
-✅ 4800+ Movies
-
-✅ Machine Learning
-
-✅ Cosine Similarity
-
-✅ TMDB API
 
 </div>
 """,unsafe_allow_html=True)
