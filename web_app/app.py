@@ -216,37 +216,23 @@ Discover your next favourite movie using AI-powered recommendations.
 </p>
 """, unsafe_allow_html=True)
 
-left,right=st.columns([2,1])
+st.markdown("## 🍿 Find Similar Movies")
 
-with left:
+st.write(
+    "Select a movie you already enjoy and let the recommendation engine discover similar movies for you."
+)
 
-    st.markdown("""
-    ### 🍿 Find Similar Movies
+selected_movie = st.selectbox(
+    "",
+    movies["title"].values,
+    index=None,
+    placeholder="Search any movie..."
+)
 
-    Select a movie you already enjoy and let the recommendation engine
-    discover similar movies for you.
-    """)
-
-    selected_movie=st.selectbox(
-
-        "",
-
-        movies["title"].values,
-
-        index=None,
-
-        placeholder="Search any movie..."
-
-    )
-
-    recommend_btn=st.button(
-
-        "✨ Recommend Movies",
-
-        use_container_width=True
-
-    )
-
+recommend_btn = st.button(
+    "✨ Recommend Movies",
+    use_container_width=True
+)
 st.divider()
 
 # ================= RECOMMENDATIONS =================
