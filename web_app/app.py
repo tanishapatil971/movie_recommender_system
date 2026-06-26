@@ -263,7 +263,7 @@ if recommend_btn:
 
             recommendations = recommend(selected_movie)
 
-        st.subheader("🎯 Recommended For You")
+        st.subheader("Recommended For You")
 
         cols = st.columns(5)
 
