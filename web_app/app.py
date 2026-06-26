@@ -245,11 +245,11 @@ if recommend_btn:
 
     else:
 
-        with st.spinner("Finding similar movies... 🍿"):
+        with st.spinner("Finding similar movies..."):
 
             recommendations = recommend(selected_movie)
 
-        st.subheader("Recommended For You")
+        st.markdown("Recommended For You")
 
         cols = st.columns(5)
 
@@ -265,7 +265,6 @@ if recommend_btn:
                     padding:12px;
                     transition:.3s;
                     box-shadow:0px 5px 20px rgba(0,0,0,.35);
-                    min-height:610px;
                 }
 
                 .movie-title{
@@ -335,15 +334,6 @@ if recommend_btn:
                     unsafe_allow_html=True
                 )
 
-                overview = movie["overview"]
-
-                if len(overview) > 130:
-                    overview = overview[:130] + "..."
-
-                st.markdown(
-                    f"<div class='movie-overview'>{overview}</div>",
-                    unsafe_allow_html=True
-                )
 
                 st.markdown("</div>", unsafe_allow_html=True)
 
