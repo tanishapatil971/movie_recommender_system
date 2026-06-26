@@ -47,8 +47,9 @@ background:#0E1117;
 font-size:48px;
 font-weight:800;
 text-align:center;
-color:#E50914;
-margin-top:15px;
+color:white;
+margin-top:20px;
+letter-spacing:1px;
 }
 
 /* Subtitle */
@@ -175,17 +176,64 @@ similarity = pickle.load(
 
 # ---------------- UI ----------------
 
-st.markdown(
-"""
-<div class='main-title'>
+st.markdown("""
+<div style="
+background:linear-gradient(135deg,#1B1B1B,#0E1117);
+padding:45px;
+border-radius:20px;
+text-align:center;
+margin-bottom:30px;
+box-shadow:0px 8px 25px rgba(0,0,0,.45);
+">
+
+<h1 style="
+color:white;
+font-size:52px;
+margin-bottom:10px;
+font-weight:800;
+">
 🎬 Movie Recommendation System
+</h1>
+
+<p style="
+color:#CFCFCF;
+font-size:19px;
+margin-bottom:20px;
+">
+Discover movies you'll love using Artificial Intelligence
+</p>
+
+<div style="
+display:inline-block;
+background:#262730;
+padding:10px 22px;
+border-radius:30px;
+color:#E8E8E8;
+font-size:16px;
+">
+✨ Content-Based Recommendation Engine • TMDB API • Machine Learning
 </div>
 
-<div class='subtitle'>
-Discover movies you'll love using Machine Learning & Cosine Similarity
 </div>
-""",
-unsafe_allow_html=True
+""", unsafe_allow_html=True)
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.metric("🎥 Movies", f"{len(movies):,}")
+
+with col2:
+    st.metric("🤖 Model", "Cosine Similarity")
+
+with col3:
+    st.metric("🌐 API", "TMDB")
+
+st.write("")
+
+st.markdown("## 🍿 Find Your Favorite Movie")
+
+st.caption(
+    "Choose a movie you already enjoy and discover five similar recommendations."
 )
 
 selected_movie = st.selectbox(
@@ -197,7 +245,7 @@ selected_movie = st.selectbox(
 
 st.write("")
 
-if st.button("🎥 Recommend Movies", use_container_width=True):
+if st.button("✨ Discover Similar Movies", use_container_width=True):
 
     if not selected_movie:
         st.warning("Please select a movie first.")
